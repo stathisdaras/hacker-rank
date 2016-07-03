@@ -3,6 +3,9 @@ package algorithms.implementation;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public class ServiceLane {
 
@@ -23,16 +26,11 @@ public class ServiceLane {
 			int entry = Integer.parseInt(points[0]);
 			int exit = Integer.parseInt(points[1]);
 
-			String min = "3";
-
+			// create subarray and convert it to list
+			List<String> laneDrive = Arrays.asList(Arrays.copyOfRange(widthArray, entry, exit));
+			
 			// find min width between entry and exit points in the sevice lane
-			for (int i = entry; i <= exit; i++) {
-				if (widthArray[i].compareTo(min) < 0) {
-					min = widthArray[i];
-				}
-			}
-
-			System.out.println(min);
+			System.out.println(Collections.min(laneDrive));
 
 		}
 	}
