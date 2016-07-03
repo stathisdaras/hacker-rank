@@ -15,34 +15,16 @@ public class SherlockAndSquare {
 		br.readLine();
 		String input;
 
+		// for every line compute  the square numbers between sqrt(A) and sqrt(B) (efficient)
 		while ((input = br.readLine()) != null) {
 			String[] testCases = input.split(" ");
 
 			Double A = Double.parseDouble(testCases[0]);
 			Double B = Double.parseDouble(testCases[1]);
 
-			int difference = (int) (Math.sqrt(B) - Math.sqrt(A));
-
-			if (isSquareNumber(B)) {
-				difference++;
-			}
-
-			if (!isSquareNumber(B) && !isSquareNumber(A) && difference != 0) {
-				difference++;
-			}
+			int difference = (int) (Math.floor(Math.sqrt(B)) - Math.ceil(Math.sqrt(A)) + 1);
 
 			System.out.println(difference);
 		}
-	}
-
-	// if the square root of a number is an integer then it is a square number
-	private static boolean isSquareNumber(Double number) {
-		double root = Math.sqrt(number);
-		return isInteger(root);
-	}
-
-	// a number is integer if it equals its rounded value
-	private static boolean isInteger(double root) {
-		return ((root == Math.floor(root)) && !Double.isInfinite(root));
 	}
 }
