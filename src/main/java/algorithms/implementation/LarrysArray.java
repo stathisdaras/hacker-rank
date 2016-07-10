@@ -27,19 +27,48 @@ public class LarrysArray {
 
 	private static boolean isLarrysArraySortableByRobot(String[] larrysArray) {
 
-		for (int i = larrysArray.length - 1; i > ROBOT_PERMUTATION_RANGE - 2; i--) {
-			for (int j = 0; j < ROBOT_PERMUTATION_RANGE; j++) {
-				if (isArraySorted(larrysArray)) {
-					return true;
-				}
-				rotateArray(larrysArray, i);
+		int length = larrysArray.length;
+		int iterations = factorial(length) / 2;
+		int shift = 0;
+
+		int factor = ROBOT_PERMUTATION_RANGE;
+		int factorial = ROBOT_PERMUTATION_RANGE;
+
+		for (int i = 1; i < iterations; i++) {
+
+			if (isArraySorted(larrysArray)) {
+				return true;
 			}
+
+			if (i % ROBOT_PERMUTATION_RANGE == 0) {
+				shift++;
+			}
+			
+			if (i / factorial == factor + 1) {
+				factorial = i;
+				factor++;
+				shift += factor - ROBOT_PERMUTATION_RANGE;
+			}
+
+
+			int end = length - 1 - shift;
+			int start = length - ROBOT_PERMUTATION_RANGE - shift;
+
+			rotateArray(larrysArray, start, end);
+
+			if (i % ROBOT_PERMUTATION_RANGE == 0) {
+				shift--;
+			}
+
+			if (i / factorial == 1) {
+				shift = 0;
+			}
+
 		}
 		return false;
 	}
 
-	private static void rotateArray(String[] a, int end) {
-		int start = end - (ROBOT_PERMUTATION_RANGE - 1);
+	private static void rotateArray(String[] a, int start, int end) {
 		int mid = end - (ROBOT_PERMUTATION_RANGE - 2);
 		String first = a[start];
 		String middle = a[mid];
@@ -57,5 +86,13 @@ public class LarrysArray {
 			}
 		}
 		return true; // If this part has been reached, the array must be sorted.
+	}
+
+	public static int factorial(int n) {
+		int fact = 1; // this will be the result
+		for (int i = 1; i <= n; i++) {
+			fact *= i;
+		}
+		return fact;
 	}
 }
