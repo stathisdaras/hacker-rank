@@ -1,98 +1,46 @@
 package algorithms.implementation;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
+import java.util.Scanner;
 
 public class LarrysArray {
 
-	private static final int ROBOT_PERMUTATION_RANGE = 3;
-
 	public static void main(String[] args) throws IOException {
 
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		Scanner sc = new Scanner(System.in);
 
 		// first row is the number of test cases
-		br.readLine();
+		sc.nextLine();
 
-		while ((br.readLine()) != null) {
-			String[] larrysArray = br.readLine().split(" ");
+		while ((sc.nextLine()) != null) {
+			int N = sc.nextInt();
+			int[] larrysArray = new int[N];
+			for (int n = 0; n < N; n++)
+				larrysArray[n] = sc.nextInt();
 
-			String result = isLarrysArraySortableByRobot(larrysArray) ? "YES" : "NO";
+			String result = isSortableByRobot(larrysArray) ? "YES" : "NO";
 
 			System.out.println(result);
 
 		}
 	}
 
-	private static boolean isLarrysArraySortableByRobot(String[] larrysArray) {
-
-		int length = larrysArray.length;
-		int iterations = factorial(length) / 2;
-		int shift = 0;
-
-		int factor = ROBOT_PERMUTATION_RANGE;
-		int factorial = ROBOT_PERMUTATION_RANGE;
-
-		for (int i = 1; i < iterations; i++) {
-
-			if (isArraySorted(larrysArray)) {
-				return true;
-			}
-
-			if (i % ROBOT_PERMUTATION_RANGE == 0) {
-				shift++;
-			}
-			
-			if (i / factorial == factor + 1) {
-				factorial = i;
-				factor++;
-				shift += factor - ROBOT_PERMUTATION_RANGE;
-			}
-
-
-			int end = length - 1 - shift;
-			int start = length - ROBOT_PERMUTATION_RANGE - shift;
-
-			rotateArray(larrysArray, start, end);
-
-			if (i % ROBOT_PERMUTATION_RANGE == 0) {
-				shift--;
-			}
-
-			if (i / factorial == 1) {
-				shift = 0;
-			}
-
-		}
+	/*
+	 * If the grid width is odd, then the number of inversions in a solvable
+	 * situation is even If the grid width is even, and the blank is on an odd
+	 * row counting from the bottom (last, third-last, fifth-last etc) then the
+	 * number of inversions in a solvable situation is even.
+	 */
+	private static boolean isSortableByRobot(int[] a) {
+		int length = a.length;
+		int count = 0; // count of inversions
+		for (int i = 0; i < length - 1; i++)
+			for (int j = i + 1; j < length; j++)
+				if (a[i] > (a[j]))
+					count++;
+		if (count % 2 == 0) // can be sorted
+			return true;
 		return false;
 	}
 
-	private static void rotateArray(String[] a, int start, int end) {
-		int mid = end - (ROBOT_PERMUTATION_RANGE - 2);
-		String first = a[start];
-		String middle = a[mid];
-		String last = a[end];
-		// rotate array elements
-		a[start] = middle;
-		a[mid] = last;
-		a[end] = first;
-	}
-
-	private static boolean isArraySorted(String[] a) {
-		for (int i = 0; i < a.length - 1; i++) {
-			if (a[i].compareTo(a[i + 1]) > 0) {
-				return false; // It is proven that the array is not sorted.
-			}
-		}
-		return true; // If this part has been reached, the array must be sorted.
-	}
-
-	public static int factorial(int n) {
-		int fact = 1; // this will be the result
-		for (int i = 1; i <= n; i++) {
-			fact *= i;
-		}
-		return fact;
-	}
 }
